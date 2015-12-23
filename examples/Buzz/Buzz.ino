@@ -3,7 +3,8 @@ This program should beep the buzzer after every 200ms.
 Make sure the Jumpers are properly connected on the board.
 
 */
-#define BUZZER PF_2
+#include <SPI.h>
+#include <StarShipXP.h>
 
 void setup() {                
 

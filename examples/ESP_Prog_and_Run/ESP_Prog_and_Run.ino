@@ -1,30 +1,32 @@
+#include <SPI.h>
+#include <StarShipXP.h>
 
 void setup() {
   // initialize both serial ports:
-  pinMode(PB_3, OUTPUT);
-  pinMode(PC_4, OUTPUT);
-  pinMode(PF_0, OUTPUT);
+  pinMode(LED_R, OUTPUT);
+  pinMode(LED_G, OUTPUT);
+  pinMode(BT_KEY, OUTPUT);
 
-  pinMode(PE_4, OUTPUT);
-  pinMode(PE_3, OUTPUT);
-  pinMode(PA_5, OUTPUT);
-  pinMode(PC_6, OUTPUT);
+  pinMode(KEYPAD_OUT1, OUTPUT);
+  pinMode(KEYPAD_OUT2, OUTPUT);
+  pinMode(KEYPAD_OUT3, OUTPUT);
+  pinMode(KEYPAD_OUT4, OUTPUT);
 
-  digitalWrite(PE_4, HIGH);
-  digitalWrite(PE_3, HIGH);
-  digitalWrite(PA_5, HIGH);
-  digitalWrite(PC_6, HIGH);
+  digitalWrite(KEYPAD_OUT1, HIGH);
+  digitalWrite(KEYPAD_OUT2, HIGH);
+  digitalWrite(KEYPAD_OUT3, HIGH);
+  digitalWrite(KEYPAD_OUT4, HIGH);
     
-  pinMode(PF_4, INPUT);
+  pinMode(KEYPAD_IN4, INPUT);
   Serial.begin(115200);
   Serial1.begin(115200);
 }
 
 void loop() {
   // read from port 1, send to port 0:
-  digitalWrite(PB_3, digitalRead(PF_4));
-  digitalWrite(PC_4, !digitalRead(PF_4));
-  digitalWrite(PF_0, digitalRead(PF_4));
+  digitalWrite(LED_R, digitalRead(KEYPAD_IN4));
+  digitalWrite(LED_G, !digitalRead(KEYPAD_IN4));
+  digitalWrite(BT_KEY, digitalRead(KEYPAD_IN4));
   
   if (Serial1.available()) {
     int inByte = Serial1.read();

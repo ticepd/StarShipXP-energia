@@ -1,8 +1,6 @@
 // Example testing sketch for various DHT humidity/temperature sensors
 // Written by ladyada, public domain
-#include <Wire.h>
 #include <SPI.h>
-#include "DHT.h"
 #include <StarShipXP.h>
 
 #define DHTPIN DHT_IN     // what pin we're connected to

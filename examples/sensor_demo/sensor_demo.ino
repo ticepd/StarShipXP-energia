@@ -2,21 +2,12 @@
 // Written by ladyada, public domain
 #include <Wire.h>
 #include <SPI.h>
-#include "DHT.h"
-#include <LiquidCrystal.h>
 #include <StarShipXP.h>
 
-#define RS PF_1
-#define EN PE_0
-#define D4 PE_4
-#define D5 PA_5
-#define D6 PE_3
-#define D7 PC_6
-
 // initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(RS, EN, D4, D5, D6, D7);
+LiquidCrystal lcd(LCD_RS, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
-#define DHTPIN PB_2     // what pin we're connected to
+#define DHTPIN DHT_IN     // what pin we're connected to
 
 #define DHTTYPE DHT11   // DHT 22  (AM2302)
 
@@ -30,11 +21,10 @@ void setup() {
   lcd.begin(16,2);
   dht.begin();
   lcd.print(" Temp  Humidity");
-  SPI.setModule(2);
-  pinMode(GLCD_SEL1,OUTPUT);
-  digitalWrite(GLCD_SEL1,HIGH);
+  pinMode(SPI_CS_A,OUTPUT);
+  digitalWrite(SPI_CS_A,HIGH);
   
-  Tft.begin(GLCD_SEL2,GLCD_DC,PF_0,GLCD_RESET);
+  Tft.begin(SPI_CS_B,GLCD_DC,0,GLCD_RESET);
   Tft.TFTinit();
 }
 
