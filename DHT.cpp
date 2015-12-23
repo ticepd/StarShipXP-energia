@@ -31,7 +31,7 @@ void DHT::begin(void) {
 
 //boolean S == Scale.  True == Fahrenheit; False == Celcius
 float DHT::readTemperature(bool S, bool force) {
-  float f = NAN;
+  float f;
 
   if (read(force)) {
     switch (_type) {
@@ -68,7 +68,7 @@ float DHT::convertFtoC(float f) {
 }
 
 float DHT::readHumidity(bool force) {
-  float f = NAN;
+  float f;
   if (read()) {
     switch (_type) {
     case DHT11:

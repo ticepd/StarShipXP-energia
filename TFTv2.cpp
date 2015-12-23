@@ -20,41 +20,30 @@
 
 */
 // Board check
-
 #include <TFTv2.h>
 #include "Energia.h"
 #include "SPI.h"
-#include "FastDigitalWrite.h"
-#include "inc/tm4c123gh6pm.h"
 
 
 #define FONT_SPACE 6
 #define FONT_X 8
 #define FONT_Y 8
 
-#define portOutputRegister(x) (regtype)portBASERegister(x)
-
-
-#define LCD_CS_PIN GPIO_PIN_2
-#define CS_PIN PA_2
-#define cbi_macro(reg, mask) GPIO_PORTA_DATA_R &= ~LCD_CS_PIN
-#define sbi_macro(reg, mask) GPIO_PORTA_DATA_R |= LCD_CS_PIN
-
 
 void TFT::sendCMD(uint8_t index)
 {
     digitalWrite(_dcPin,   LOW);
-digitalWrite(CS_PIN, LOW);
+	digitalWrite(_csPin, LOW);
     SPI.transfer(index);
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 void TFT::WRITE_DATA(uint8_t data)
 {
     digitalWrite(_dcPin,   HIGH);
-    digitalWrite(CS_PIN, LOW); 
+    digitalWrite(_csPin, LOW); 
     SPI.transfer(data);
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 void TFT::sendData(uint16_t data)
@@ -62,10 +51,10 @@ void TFT::sendData(uint16_t data)
     uint8_t data1 = data>>8;
     uint8_t data2 = data&0xff;
     digitalWrite(_dcPin,   HIGH);
-    digitalWrite(CS_PIN, LOW); 
+    digitalWrite(_csPin, LOW); 
     SPI.transfer(data1);
     SPI.transfer(data2);
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 void TFT::WRITE_Package(uint16_t *data, uint8_t howmany)
@@ -74,7 +63,7 @@ void TFT::WRITE_Package(uint16_t *data, uint8_t howmany)
     uint8_t   data2 = 0;
 
     digitalWrite(_dcPin,   HIGH);
-    digitalWrite(CS_PIN, LOW); 
+    digitalWrite(_csPin, LOW); 
     uint8_t count=0;
     for(count=0;count<howmany;count++)
     {
@@ -83,7 +72,7 @@ void TFT::WRITE_Package(uint16_t *data, uint8_t howmany)
         SPI.transfer(data1);
         SPI.transfer(data2);
     }
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 uint8_t TFT::Read_Register(uint8_t Addr, uint8_t xParameter)
@@ -92,11 +81,11 @@ uint8_t TFT::Read_Register(uint8_t Addr, uint8_t xParameter)
     sendCMD(0xd9);                                                      /* ext command                  */
     WRITE_DATA(0x10+xParameter);                                        /* 0x11 is the first Parameter  */
     digitalWrite(_dcPin,   LOW);
-    digitalWrite(CS_PIN, LOW); 
+    digitalWrite(_csPin, LOW); 
     SPI.transfer(Addr);
     digitalWrite(_dcPin,   HIGH);
     data = SPI.transfer(0);
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
     return data;
 }
 
@@ -106,11 +95,6 @@ void TFT::begin(uint8_t csPin, uint8_t dcPin, uint8_t blPin, uint8_t rstPin)
 	_dcPin=dcPin;
 	_blPin=blPin;
 	_rstPin=rstPin;
-
-
-	_port_cs   = portOutputRegister(digitalPinToPort(_csPin));
-	_bit_cs    = digitalPinToBitMask(_csPin);
-
 
 }
 
@@ -132,13 +116,17 @@ void TFT::TFTinit (void)
 	//digitalWrite(_csPin, HIGH);
 
 	SPI.begin();
+	
+#ifdef __TM4C123GH6PM__
 	SPI.setModule(2);
+#endif
+
 	SPI.setDataMode(SPI_MODE0);
 	SPI.setClockDivider(SPI_CLOCK_DIV16);
 	SPI.setBitOrder(MSBFIRST); 
 	
 	pinMode(_csPin, OUTPUT);
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 
 	pinMode(_dcPin, OUTPUT);
 	digitalWrite(_dcPin, LOW);
@@ -149,7 +137,7 @@ void TFT::TFTinit (void)
 	pinMode(_rstPin, OUTPUT);
 	digitalWrite(_rstPin, LOW);
 
-	digitalWrite(CS_PIN, HIGH); 
+	digitalWrite(_csPin, HIGH); 
     digitalWrite(_dcPin,   HIGH);
     uint8_t i=0, TFTDriver=0;
 
@@ -335,7 +323,7 @@ void TFT::fillScreen(uint16_t XL, uint16_t XR, uint16_t YU, uint16_t YD, uint16_
                                                                         /* m                            */
 
     digitalWrite(_dcPin,   HIGH);
-    digitalWrite(CS_PIN, LOW); 
+    digitalWrite(_csPin, LOW); 
 
     uint8_t Hcolor = color>>8;
     uint8_t Lcolor = color&0xff;
@@ -345,7 +333,7 @@ void TFT::fillScreen(uint16_t XL, uint16_t XR, uint16_t YU, uint16_t YD, uint16_
         SPI.transfer(Lcolor);
     }
 
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 void TFT::fillScreen(void)
@@ -356,15 +344,18 @@ void TFT::fillScreen(void)
                                                                         /* m                            */
 
     digitalWrite(_dcPin,   HIGH);
-    digitalWrite(CS_PIN, LOW); 
-    for(uint16_t i=0; i<(MAX_X*MAX_Y)/2; i++)
+    digitalWrite(_csPin, LOW); 
+
+    unsigned long  XY = MAX_X+1;
+	XY = XY * (MAX_Y+1);
+
+	unsigned long i;
+    for(i=0; i<XY; i++)
     {
         SPI.transfer(0);
         SPI.transfer(0);
-        SPI.transfer(0);
-        SPI.transfer(0);
     }
-    digitalWrite(CS_PIN, HIGH); 
+    digitalWrite(_csPin, HIGH); 
 }
 
 

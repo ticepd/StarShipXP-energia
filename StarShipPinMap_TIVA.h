@@ -5,12 +5,8 @@
 #define LED_B PC_4
 
 #define LDR_NTC PE_5
-
-
 #define POT PB_5
-
 #define NAVIKEYS PE_1
-
 #define MIC_IN PE_2
 
 #define AUDIO_IN_L PD_2
@@ -48,8 +44,6 @@
 #define KEYPAD_IN3 PD_7
 #define KEYPAD_IN4 PF_4
 
-#define GLCD_SEL1 SPI_CS_A
-#define GLCD_SEL2 SPI_CS_B
 #define GLCD_RESET PB_6
 #define GLCD_DC PA_4
 #define GLCD_SCK PB_4
@@ -57,6 +51,3 @@
 #define BT_KEY PF_0
 #define UART_TX PB_1
 #define UART_RX PB_0
-
-
-

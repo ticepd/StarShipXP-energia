@@ -15,8 +15,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
+#include <Energia.h>
+#ifdef __TM4C123GH6PM__
 #include <../Wire/Wire.h>
+#else
+#include <Wire.h>
+#endif
+
 #include "LM75.h"
 
 LM75::LM75 () {

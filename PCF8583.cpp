@@ -27,7 +27,11 @@
 
 
 #include <Arduino.h>
+#ifdef __TM4C123GH6PM__
 #include <../Wire/Wire.h>
+#else
+#include <Wire.h>
+#endif
 #include "PCF8583.h"
 
 namespace {

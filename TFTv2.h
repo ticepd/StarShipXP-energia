@@ -21,19 +21,12 @@
 */
 
 
-
 #ifndef TFTv2_h
 #define TFTv2_h
 
 #include "Energia.h"
 #include "SPI.h"
 #include <stdint.h>
-
-#include <inc/hw_types.h>
-#include <inc/hw_memmap.h>
-#include <driverlib/sysctl.h>
-#include <driverlib/pin_map.h>
-#include <driverlib/gpio.h>
 
 //Basic Colors
 #define RED		0xf800
